@@ -1,3 +1,4 @@
+
 # Báo Cáo Cá Nhân — Lab 7: Embedding & Vector Store
 
 **Họ tên:** [Nguyễn Quý Dũng]
@@ -129,30 +130,32 @@ Câu hỏi: Chunking là gì?
 ## 5. Kết quả truy xuất của tôi (Competition Results) — Cá nhân (10 điểm)
 
 ### Thông tin triển khai & Cấu hình thử nghiệm
+
 - **Chiến lược Chunking sử dụng:** `OverlapChunker` (Sliding Window Chunking - Cắt văn bản dạng cửa sổ trượt).
+- **Mô hình Embedding:** **OpenAI `text-embedding-3-small`** (Kết nối qua OpenAI API từ `.env`).
 - **Cấu hình thiết lập (Settings):**
   - `chunk_size = 400` ký tự (Đảm bảo mỗi chunk chứa trọn vẹn 1-2 câu/điều khoản chính sách).
   - `overlap_size = 80` ký tự (Tỷ lệ chồng chéo ~20%, giữ lại ngữ cảnh ranh giới giữa các chunk để tránh bị đứt đoạn thông tin quan trọng).
 - **Kết quả phân chia (Chunking Output):**
   - **Tổng số tài liệu nạp vào (Corpus):** 6 tài liệu chính sách E-commerce (GearVN, CellphoneS).
-  - **Tổng số Chunks được tạo ra:** **96 chunks**.
-- **Cơ chế truy xuất:** Sử dụng pre-filtering theo `metadata` (`customer_role`) kết hợp Vector Similarity Search với `top_k = 3`.
+  - **Tổng số Chunks được tạo ra:** **90 chunks**.
+- **Cơ chế truy xuất:** Sử dụng pre-filtering theo `metadata` (`customer_role="buyer"`) kết hợp Vector Similarity Search với `top_k = 3`.
 
 ---
 
-| # | Câu hỏi (Query)                                                                                                                                                       | Top-1 Chunk truy xuất được (tóm tắt)                                                               | Điểm Score | Có liên quan không? (Relevant)                    | Câu trả lời của Agent (tóm tắt)                                                                                           |
-| - | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | `gearvn-privacy-policy_chunk_0`: "Chính sách bảo mật thông tin GearVN... thu thập thông tin..." | 0.3201       | Có (nằm trong Top-3`gearvn-warranty-policy`)     | Khách hàng được đổi mới trong vòng 30 ngày tính từ ngày mua hàng đối với gaming gear lỗi từ nhà sản xuất. |
-| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu?                                                                                     | `gearvn-shipping-policy_chunk_1`: "...Quý khách hoàn toàn có quyền từ chối nhận hàng..."     | 0.2279       | Có (nằm trong Top-3`gearvn-return-policy`)       | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là trong vòng 14 ngày kể từ khi nhận hàng.         |
-| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này?                                                      | `gearvn-warranty-policy_chunk_15`: "...4.1 Chính sách đổi mới... ZaloPay/Ví điện tử..."       | 0.3011       | Có (nằm trong Top-3`gearvn-payment-guide`)       | Mở ứng dụng ZaloPay trên điện thoại và quét mã QR hiển thị trên màn hình để hoàn tất đơn hàng.            |
-| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu?                 | `gearvn-privacy-policy_chunk_3`: "...Thông tin thẻ thanh toán của Khách hàng..."                 | 0.3254       | Có (nằm trong Top-3`cellphones-shipping-policy`) | Đơn hàng dưới 300.000đ dành cho khách hàng thông thường có phí vận chuyển là 15.000đ.                         |
-| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu?                                                      | `gearvn-privacy-policy_chunk_2`: "...Chúng tôi cũng có thể thu thập thông tin..."               | 0.3584       | Có (nằm trong Top-3`cellphones-shipping-policy`) | Thời gian hoàn tiền khi hủy đơn hàng đã thanh toán qua thẻ ATM là trong vòng 7 - 10 ngày làm việc.              |
+| # | Câu hỏi (Query)                                                                                                                                                       | Top-1 Chunk truy xuất được (tóm tắt)                                                                                                                     | Điểm Score     | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt)                                                                                               |
+| - | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | `gearvn-warranty-policy`: "...được đổi mới trong vòng 7 ngày tính từ ngày mua hàng. Áp dụng với các dòng sản phẩm Laptop, màn hình..."  | **0.7422** | Có (Đúng Top-1)                | Khách hàng được đổi mới sản phẩm lỗi trong vòng 30 ngày đối với gaming gear (hoặc 7 ngày với laptop/màn hình). |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu?                                                                                     | `gearvn-warranty-policy`: "...nếu phát sinh lỗi, GearVN xin phép hoàn trả sản phẩm sau 3 ngày. Tất cả các sản phẩm đều được áp dụng..." | **0.7276** | Có (Đúng Top-1 / Top-3)        | Thời gian gửi chuyển trả sản phẩm lỗi cho GearVN quy định trong vòng 14 ngày kể từ khi nhận hàng.                    |
+| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này?                                                      | `gearvn-payment-guide`: "...chuyển sang giao diện thanh toán của ZaloPay. Bước 2: Mở ứng dụng ZaloPay của bạn quét mã QR..."                    | **0.7150** | Có (Đúng Top-1)                | Mở ứng dụng ZaloPay trên điện thoại và quét mã QR hiển thị để hoàn tất thanh toán đặt hàng.                     |
+| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu?                 | `cellphones-shipping-policy`: "...Đơn hàng dưới 300.000đ: Phí giao hàng 15.000đ. Đơn hàng từ 300.000đ trở lên: Miễn phí..."                | **0.6229** | Có (Đúng Top-1 chính xác)    | Phí giao hàng đối với đơn hàng 250.000đ (dưới 300.000đ) dành cho người mua thường là 15.000đ.                    |
+| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu?                                                      | `cellphones-shipping-policy`: "...CellphoneS hỗ trợ khách hàng hủy đơn và hoàn tiền... thời gian xử lý..."                                      | **0.5985** | Có (Đúng Top-1 chính xác)    | Thời gian nhận lại tiền khi hủy đơn thanh toán qua thẻ ATM là 7 - 10 ngày làm việc.                                    |
 
 **Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 
-> Việc áp dụng chiến lược `OverlapChunker` (overlap = 80 chars, chunk_size = 400) giúp bảo toàn hoàn toàn ngữ cảnh ranh giới giữa các câu và điều khoản chính sách. Khi kết hợp lọc metadata `customer_role`, tốc độ và độ chính xác truy xuất các tài liệu dành riêng cho Người mua (`buyer`) tăng lên rõ rệt, không bị lẫn với chính sách Người bán (`seller`).
+> Khi nâng cấp từ `MockEmbedder` lên mô hình embedding thật của **OpenAI (`text-embedding-3-small`)**, độ tương đồng Cosine Similarity tăng vọt từ mức ngẫu nhiên ~0.30 lên dải **0.5985 – 0.7422**, phản ánh chính xác độ tương đồng ngữ nghĩa. Kết hợp chiến lược `OverlapChunker` (overlap=80, size=400) giúp cắt chính xác các đoạn chính sách mà không làm mất thông tin ở các ranh giới dòng.
 
 ---
 
