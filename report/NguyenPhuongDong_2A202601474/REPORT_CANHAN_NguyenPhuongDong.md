@@ -115,6 +115,10 @@ tests/test_solution.py ..........................................       [100%]
 
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
+**Chiến lược của tôi:** `DocumentStructureChunker(max_chunk_size=900)` — chia theo Markdown header và các tiêu đề nhỏ dạng `2.`, `4.1`, `e.`, `Bước 1:`, đồng thời giữ chuỗi tiêu đề cha trong mỗi chunk.
+
+**Tổng số chunk đã nạp:** 56 chunks.
+
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 | - | ----------------- | ------------------------------------------ | ------------ | --------------------------------- | ------------------------------------- |
 | 1 | Sản phẩm gaming gear lỗi do nhà sản xuất được đổi mới trong bao nhiêu ngày? | `gearvn-warranty-policy`, mục `4.1 Chính sách đổi mới`: gaming gear được đổi trong 30 ngày. | 0,770556 | Có (top-1) | Đổi mới trong vòng 30 ngày nếu phát sinh lỗi từ nhà sản xuất. |
