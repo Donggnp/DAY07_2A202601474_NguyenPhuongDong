@@ -1,0 +1,6 @@
+url,doc_id,title,customer_role,category,language,document_version,license_or_permission
+http://localhost:8000/returns.html,returns,Đổi trả,buyer,returns-policy,vi,not-stated,public-source
+http://localhost:8000/shipping.html,shipping,Giao hàng,buyer,shipping-policy,vi,not-stated,public-source
+http://localhost:8000/privacy.html,privacy,Bảo mật,both,privacy-policy,vi,not-stated,public-source
+http://localhost:8000/seller.html,seller,Người bán,seller,seller-policy,vi,not-stated,public-source
+http://localhost:8000/payment.html,payment,Thanh toán,buyer,payment-policy,vi,not-stated,public-source
