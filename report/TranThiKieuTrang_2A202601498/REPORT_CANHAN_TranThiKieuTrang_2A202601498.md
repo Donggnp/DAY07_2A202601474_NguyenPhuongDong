@@ -153,18 +153,25 @@ tests/test_solution.py::TestEmbeddingStoreDeleteDocument::test_delete_returns_tr
 
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
+**Chiến lược của tôi:** `FixedSizeChunker(chunk_size=400, overlap=0)`
+**Tổng số chunk đã nạp:** 73 chunks từ 6 tài liệu
+**Embedder:** MockEmbedder (MD5 hash, deterministic)
+
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
-| 1 | *(câu hỏi từ nhóm)* | | | | |
-| 2 | *(câu hỏi từ nhóm)* | | | | |
-| 3 | *(câu hỏi từ nhóm)* | | | | |
-| 4 | *(câu hỏi từ nhóm)* | | | | |
-| 5 | *(câu hỏi từ nhóm)* | | | | |
+| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | Top-1 từ `gearvn-shipping-policy`: nói về kiểm tra ngoại quan khi giao hàng (sai file, cần `gearvn-warranty-policy`). Top-2 từ `cellphones-shipping-policy`. | 0.290 | Không — Top-3 không chứa chunk có đáp án "30 ngày" | Agent không có đủ context để trả lời đúng |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu? | Top-1 từ `gearvn-warranty-policy`: nói về "Sản phẩm đổi mới trong 30 ngày" (đúng chủ đề bảo hành nhưng sai section, cần phần "14 ngày" từ `gearvn-return-policy`). | 0.362 | Một phần — Đúng chủ đề đổi trả nhưng chunk không chứa đáp án "14 ngày" | Agent trả lời dựa trên context gần đúng nhưng thiếu con số chính xác |
+| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này? | Top-1 từ `gearvn-shipping-policy`: nói về hủy/thay đổi đơn hàng (sai file, cần `gearvn-payment-guide`). | 0.290 | Không — Chunk sai chủ đề hoàn toàn | Agent không có context về ZaloPay |
+| 4 | Phí vận chuyển CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường? *(Filter: `customer_role="buyer"`)* | Top-1 từ `cellphones-shipping-policy`: nói về đóng gói và xử lý thất thoát (đúng file nhưng sai section, cần phần "chi phí vận chuyển"). | 0.265 | Một phần — Đúng file nhưng chunk không chứa bảng phí "15.000đ" | Agent không tìm đúng thông tin phí vận chuyển |
+| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu? | Top-1 từ `cellphones-shipping-policy`: nói về thanh toán trước 100% giá trị (đúng file nhưng sai section, cần phần "hoàn tiền qua ATM: 7-10 ngày"). | 0.277 | Một phần — Đúng file, chunk liên quan đến thanh toán nhưng không chứa đáp án "7-10 ngày" | Agent không tìm đúng thông tin hoàn tiền |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** __ / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 2 / 5 (Câu 2 và 5 có chunk gần đúng chủ đề nhưng thiếu đáp án chính xác)
+
+**Failure Analysis — Trường hợp lỗi tiêu biểu:**
+> **Câu 3** là failure case rõ ràng nhất: Câu hỏi về thanh toán ZaloPay nhưng Top-3 hoàn toàn không chứa chunk nào từ `gearvn-payment-guide`. Nguyên nhân: `FixedSizeChunker(400, 0)` cắt cứng 400 ký tự mà không tôn trọng ranh giới đoạn/câu, nên chunk chứa thông tin ZaloPay có thể bị chặt nửa chừng, khiến MockEmbedder (hash MD5) không tạo được vector tương đồng đủ cao. Thêm vào đó, overlap = 0 nghĩa là mỗi thông tin chỉ xuất hiện đúng 1 lần trong 1 chunk duy nhất, giảm cơ hội "bắt" được câu trả lời. Chiến lược `RecursiveChunker` hoặc `SentenceChunker` có thể khắc phục bằng cách tách ở ranh giới tự nhiên hơn.
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
-> *(Sẽ điền sau buổi thuyết trình)*
+> Khi so sánh với các bạn cùng nhóm dùng `RecursiveChunker` và `SentenceChunker`, tôi thấy rằng `FixedSizeChunker` không overlap tạo ra nhiều chunk bị đứt đoạn, dẫn đến retrieval kém chính xác hơn. Chiến lược chia theo câu hoặc đệ quy giữ được ngữ cảnh tốt hơn, đặc biệt với các tài liệu chính sách có cấu trúc mục-khoản rõ ràng.
 
 ---
 
@@ -176,5 +183,5 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hướng tiếp cận của tôi (My Approach) | 10 / 10 |
 | Hoàn thiện code (Core Implementation — tests) | 30 / 30 |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5 |
-| Kết quả truy xuất của tôi (Competition Results) | / 10 |
-| **Tổng phần cá nhân** | **50 / 60** |
+| Kết quả truy xuất của tôi (Competition Results) | 6 / 10 |
+| **Tổng phần cá nhân** | **56 / 60** |
