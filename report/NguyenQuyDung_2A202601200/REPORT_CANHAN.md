@@ -79,7 +79,6 @@ Giải thích cách tiếp cận của bạn khi lập trình (implement) các p
 
 > Xây dựng theo mô hình RAG chuẩn: gọi `store.search(question, top_k)` để truy xuất top-k chunk có điểm tương đồng cao nhất, ghép các nội dung này thành chuỗi ngữ cảnh `context_str` với định dạng danh sách (`- <content>`). Sau đó, inject ngữ cảnh và câu hỏi vào một Prompt có cấu trúc rõ ràng (`Context`, `Question`, `Answer:`) rồi gọi `llm_fn(prompt)` để sinh ra câu trả lời cuối cùng.
 
-
 ---
 
 ## 3. Hoàn thiện code (Core Implementation) — Cá nhân (30 điểm)
@@ -113,32 +112,41 @@ Câu hỏi: Chunking là gì?
 
 ## 4. Dự đoán độ tương tự (Similarity Predictions) — Cá nhân (5 điểm)
 
-| Cặp | Câu A | Câu B | Dự đoán | Điểm thực tế | Đúng? |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Chính sách đổi trả sản phẩm trong 7 ngày | Khách hàng có thể hoàn trả hàng trong vòng 1 tuần | cao | 0.6264 | Đúng |
-| 2 | Quy định thanh toán trực tuyến | Hình thức chuyển khoản ngân hàng và ví điện tử | cao | 0.5151 | Đúng |
-| 3 | Thời gian giao hàng dự kiến | Hướng dẫn đăng ký tài khoản người bán mới | thấp | 0.3649 | Đúng |
-| 4 | Quyền riêng tư và bảo mật thông tin | Chính sách hoàn tiền khi hủy đơn hàng | thấp | 0.3774 | Đúng |
-| 5 | Khách hàng muốn đổi trả hàng lỗi | Làm sao để tôi trả lại sản phẩm bị hỏng? | cao | 0.6114 | Đúng |
+| Cặp | Câu A                                           | Câu B                                                     | Dự đoán | Điểm thực tế | Đúng? |
+| ---- | ------------------------------------------------ | ---------------------------------------------------------- | ---------- | ---------------- | ------- |
+| 1    | Chính sách đổi trả sản phẩm trong 7 ngày | Khách hàng có thể hoàn trả hàng trong vòng 1 tuần | cao        | 0.6264           | Đúng  |
+| 2    | Quy định thanh toán trực tuyến              | Hình thức chuyển khoản ngân hàng và ví điện tử  | cao        | 0.5151           | Đúng  |
+| 3    | Thời gian giao hàng dự kiến                  | Hướng dẫn đăng ký tài khoản người bán mới      | thấp      | 0.3649           | Đúng  |
+| 4    | Quyền riêng tư và bảo mật thông tin       | Chính sách hoàn tiền khi hủy đơn hàng              | thấp      | 0.3774           | Đúng  |
+| 5    | Khách hàng muốn đổi trả hàng lỗi         | Làm sao để tôi trả lại sản phẩm bị hỏng?         | cao        | 0.6114           | Đúng  |
 
 **Kết quả nào bất ngờ nhất? Điều này nói gì về cách embeddings biểu diễn ý nghĩa?**
 
 > Kết quả ấn tượng nhất là cặp câu 5 ("Khách hàng muốn đổi trả hàng lỗi" và "Làm sao để tôi trả lại sản phẩm bị hỏng?") dù từ vựng khác nhau hoàn toàn ("đổi trả hàng lỗi" vs "trả lại sản phẩm bị hỏng"), mô hình embedding vẫn nhận diện độ tương đồng cao (0.6114). Điều này chứng minh rằng vector embeddings biểu diễn dựa trên không gian ý nghĩa ngữ nghĩa (semantic meaning) và ngữ cảnh chứ không phụ thuộc vào việc khớp từ khóa chính xác (lexical keyword matching).
 
-
 ---
 
 ## 5. Kết quả truy xuất của tôi (Competition Results) — Cá nhân (10 điểm)
 
-Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
+### Thông tin triển khai & Cấu hình thử nghiệm
+- **Chiến lược Chunking sử dụng:** `OverlapChunker` (Sliding Window Chunking - Cắt văn bản dạng cửa sổ trượt).
+- **Cấu hình thiết lập (Settings):**
+  - `chunk_size = 400` ký tự (Đảm bảo mỗi chunk chứa trọn vẹn 1-2 câu/điều khoản chính sách).
+  - `overlap_size = 80` ký tự (Tỷ lệ chồng chéo ~20%, giữ lại ngữ cảnh ranh giới giữa các chunk để tránh bị đứt đoạn thông tin quan trọng).
+- **Kết quả phân chia (Chunking Output):**
+  - **Tổng số tài liệu nạp vào (Corpus):** 6 tài liệu chính sách E-commerce (GearVN, CellphoneS).
+  - **Tổng số Chunks được tạo ra:** **96 chunks**.
+- **Cơ chế truy xuất:** Sử dụng pre-filtering theo `metadata` (`customer_role`) kết hợp Vector Similarity Search với `top_k = 3`.
 
-| # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
-|---|-----------------|------------------------------------------|------------|-----------------------------------|-------------------------------------|
-| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | `gearvn-privacy-policy_chunk_0`: "Chính sách bảo mật thông tin GearVN... thu thập thông tin..." | 0.3201 | Có (nằm trong Top-3 `gearvn-warranty-policy`) | Khách hàng được đổi mới trong vòng 30 ngày tính từ ngày mua hàng đối với gaming gear lỗi từ nhà sản xuất. |
-| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu? | `gearvn-shipping-policy_chunk_1`: "...Quý khách hoàn toàn có quyền từ chối nhận hàng..." | 0.2279 | Có (nằm trong Top-3 `gearvn-return-policy`) | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là trong vòng 14 ngày kể từ khi nhận hàng. |
-| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này? | `gearvn-warranty-policy_chunk_15`: "...4.1 Chính sách đổi mới... ZaloPay/Ví điện tử..." | 0.3011 | Có (nằm trong Top-3 `gearvn-payment-guide`) | Mở ứng dụng ZaloPay trên điện thoại và quét mã QR hiển thị trên màn hình để hoàn tất đơn hàng. |
-| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu? | `gearvn-privacy-policy_chunk_3`: "...Thông tin thẻ thanh toán của Khách hàng..." | 0.3254 | Có (nằm trong Top-3 `cellphones-shipping-policy`) | Đơn hàng dưới 300.000đ dành cho khách hàng thông thường có phí vận chuyển là 15.000đ. |
-| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu? | `gearvn-privacy-policy_chunk_2`: "...Chúng tôi cũng có thể thu thập thông tin..." | 0.3584 | Có (nằm trong Top-3 `cellphones-shipping-policy`) | Thời gian hoàn tiền khi hủy đơn hàng đã thanh toán qua thẻ ATM là trong vòng 7 - 10 ngày làm việc. |
+---
+
+| # | Câu hỏi (Query)                                                                                                                                                       | Top-1 Chunk truy xuất được (tóm tắt)                                                               | Điểm Score | Có liên quan không? (Relevant)                    | Câu trả lời của Agent (tóm tắt)                                                                                           |
+| - | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | `gearvn-privacy-policy_chunk_0`: "Chính sách bảo mật thông tin GearVN... thu thập thông tin..." | 0.3201       | Có (nằm trong Top-3`gearvn-warranty-policy`)     | Khách hàng được đổi mới trong vòng 30 ngày tính từ ngày mua hàng đối với gaming gear lỗi từ nhà sản xuất. |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu?                                                                                     | `gearvn-shipping-policy_chunk_1`: "...Quý khách hoàn toàn có quyền từ chối nhận hàng..."     | 0.2279       | Có (nằm trong Top-3`gearvn-return-policy`)       | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là trong vòng 14 ngày kể từ khi nhận hàng.         |
+| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này?                                                      | `gearvn-warranty-policy_chunk_15`: "...4.1 Chính sách đổi mới... ZaloPay/Ví điện tử..."       | 0.3011       | Có (nằm trong Top-3`gearvn-payment-guide`)       | Mở ứng dụng ZaloPay trên điện thoại và quét mã QR hiển thị trên màn hình để hoàn tất đơn hàng.            |
+| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu?                 | `gearvn-privacy-policy_chunk_3`: "...Thông tin thẻ thanh toán của Khách hàng..."                 | 0.3254       | Có (nằm trong Top-3`cellphones-shipping-policy`) | Đơn hàng dưới 300.000đ dành cho khách hàng thông thường có phí vận chuyển là 15.000đ.                         |
+| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu?                                                      | `gearvn-privacy-policy_chunk_2`: "...Chúng tôi cũng có thể thu thập thông tin..."               | 0.3584       | Có (nằm trong Top-3`cellphones-shipping-policy`) | Thời gian hoàn tiền khi hủy đơn hàng đã thanh toán qua thẻ ATM là trong vòng 7 - 10 ngày làm việc.              |
 
 **Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
 
@@ -157,4 +165,4 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hoàn thiện code (Core Implementation — tests)     | 30 / 30                |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5                  |
 | Kết quả truy xuất của tôi (Competition Results) | 10 / 10                |
-| **Tổng phần cá nhân**                      | **60 / 60**         |
+| **Tổng phần cá nhân**                      | **60 / 60**      |
