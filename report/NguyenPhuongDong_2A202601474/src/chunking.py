@@ -124,6 +124,104 @@ class RecursiveChunker:
         return chunks
 
 
+class DocumentStructureChunker:
+    """Split policy documents at headings and smaller titled subsections.
+
+    The crawler output contains one Markdown title followed by plain-text section
+    titles such as ``2. ...``, ``4.1 ...``, ``e. ...`` and ``Bước 1:``.  Each
+    returned chunk includes its document title and current parent section, so a
+    short subsection keeps enough context to be useful during retrieval.
+    """
+
+    MARKDOWN_HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+    NUMBERED_HEADING = re.compile(r"^(\d+(?:\.\d+)*)([.)])?\s+(.+?)\s*$")
+    LETTERED_HEADING = re.compile(r"^([A-Za-z])[.)]\s+(.+?)\s*$")
+    STEP_HEADING = re.compile(r"^(Bước\s+\d+)\s*:\s*$", re.IGNORECASE)
+
+    def __init__(self, max_chunk_size: int = 900) -> None:
+        self.max_chunk_size = max(100, max_chunk_size)
+
+    @classmethod
+    def _heading(cls, line: str) -> tuple[int, str] | None:
+        stripped = line.strip()
+        if not stripped:
+            return None
+
+        markdown = cls.MARKDOWN_HEADING.match(stripped)
+        if markdown:
+            return len(markdown.group(1)), markdown.group(2).strip()
+
+        numbered = cls.NUMBERED_HEADING.match(stripped)
+        if numbered:
+            number, delimiter, title = numbered.groups()
+            # A numbered list item is normally a full sentence. Section titles in
+            # this corpus are short and either upper-case or have no final period.
+            is_section_number = delimiter is not None or "." in number
+            if is_section_number and len(stripped) <= 120 and not title.endswith("."):
+                return number.count(".") + 2, stripped
+
+        lettered = cls.LETTERED_HEADING.match(stripped)
+        if lettered and len(stripped) <= 100:
+            return 4, stripped
+
+        step = cls.STEP_HEADING.match(stripped)
+        if step:
+            return 5, stripped
+
+        if len(stripped) <= 100 and stripped.isupper() and any(char.isalpha() for char in stripped):
+            return 2, stripped
+
+        return None
+
+    def chunk(self, text: str) -> list[str]:
+        if not text or not text.strip():
+            return []
+
+        hierarchy: dict[int, str] = {}
+        chunks: list[str] = []
+        body_lines: list[str] = []
+
+        def flush() -> None:
+            body = "\n".join(body_lines).strip()
+            if not body:
+                return
+            headings = [hierarchy[level] for level in sorted(hierarchy)]
+            prefix = "\n> ".join(headings)
+            section = f"> {prefix}\n\n{body}" if prefix else body
+            chunks.extend(self._split_oversized(section, headings))
+            body_lines.clear()
+
+        for raw_line in text.splitlines():
+            heading = self._heading(raw_line)
+            if heading is None:
+                body_lines.append(raw_line)
+                continue
+
+            flush()
+            level, title = heading
+            hierarchy = {key: value for key, value in hierarchy.items() if key < level}
+            hierarchy[level] = title
+
+        flush()
+
+        # A document containing only headings should still be represented.
+        if not chunks and hierarchy:
+            chunks.append("\n> ".join(hierarchy[level] for level in sorted(hierarchy)))
+        return chunks
+
+    def _split_oversized(self, section: str, headings: list[str]) -> list[str]:
+        if len(section) <= self.max_chunk_size:
+            return [section]
+
+        prefix = "\n> ".join(headings)
+        prefix = f"> {prefix}\n\n" if prefix else ""
+        available = max(100, self.max_chunk_size - len(prefix))
+        pieces = RecursiveChunker(chunk_size=available).chunk(
+            section.removeprefix(prefix)
+        )
+        return [f"{prefix}{piece}".strip() for piece in pieces if piece.strip()]
+
+
 def _dot(a: list[float], b: list[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
 

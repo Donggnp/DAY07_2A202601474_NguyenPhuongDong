@@ -1,0 +1,155 @@
+{
+  "embedding_model": "text-embedding-3-small",
+  "chunking_strategy": "DocumentStructureChunker(max_chunk_size=900)",
+  "chunk_count": 56,
+  "benchmarks": [
+    {
+      "query": "Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear?",
+      "relevant_doc": "gearvn-warranty-policy",
+      "relevant_in_top_3": true,
+      "agent_answer": "Sản phẩm gaming gear sẽ được đổi mới trong vòng 30 ngày nếu phát sinh lỗi từ nhà sản xuất.",
+      "results": [
+        {
+          "rank": 1,
+          "score": 0.770556,
+          "doc_id": "gearvn-warranty-policy",
+          "chunk_index": 6,
+          "content": "> Chính sách bảo hành GearVN\n> 4. CHÍNH SÁCH BẢO HÀNH CHUNG\n> 4.1 Chính sách đổi mới\n\nSản phẩm đổi mới trong 7 ngày:\n\nĐối với các sản phẩm lỗi phát sinh do nhà sản xuất hoặc GearVN, khách hàng sẽ được đổi mới trong vòng 7 ngày tính từ ngày mua hàng. Áp dụng với các dòng sản phẩm Laptop, màn hình (Ngoại trừ một số dòng sản phẩm có chính sách bảo hành riêng biệt).\n\nSản phẩm đổi mới trong 30 ngày:\n\nĐối với các sản phẩm lỗi phát sinh do nhà sản xuất hoặc GearVN, khách hàng sẽ được đổi mới trong vòng 30 ngày tính từ ngày mua hàng. Áp dụng với các dòng sản phẩm gaming gear (Bàn phím, chuột, tai nghe …) hoặc Linh kiện máy tính (NUC, CPU, RAM, Ổ cứng, tản nhiệt, nguồn, thiết bị khác…)\n\nYêu cầu về sản phẩm đổi mới:\nSản phẩm có tình trạng như lúc mới mua.\n\nHộp như mới, không móp méo, rách, bị viết, vẽ hoặc dán băng dính, keo...\n\nPhụ kiện đi kèm đầy đủ, nguyên vẹn, không trầy xước hư hại."
+        },
+        {
+          "rank": 2,
+          "score": 0.692409,
+          "doc_id": "gearvn-warranty-policy",
+          "chunk_index": 8,
+          "content": "> Chính sách bảo hành GearVN\n> 4. CHÍNH SÁCH BẢO HÀNH CHUNG\n> 4.2 Thời gian xử lý\n\nPK-MAN - Phụ kiện màn hìnhTrong vòng 7 ngày\n\nPK-PC - Phụ kiện PCTừ 14 đến 30 ngày\n\nPKS - Phụ kiện thông minhTrong vòng 30 ngày\n\nPW - Nguồn máy tínhTừ 7 đến 30 ngày\n\nRAMTừ 7 đến 30 ngày\n\nRAM-LAP - RAM LaptopTừ 14 đến 21 ngày\n\nRT - RouterTừ 14 đến 30 ngày\n\nSSD - Ổ cứng SSDTừ 7 đến 30 ngày\n\nTAI - Tai nghe gamingTừ 7 đến 30 ngày\n\nTAI-AUDIO - Tai nghe AudioTừ 7 đến 30 ngày\n\nTBM - Thiết bị mạngTrong vòng 14 ngày\n\nTCG - Tay cầmTừ 7 đến 30 ngày\n\nTN - Tản nhiệtTừ 14 đến 30 ngày\n\nVGA - Card màn hìnhTừ 7 đến 30 ngày\n\nVO - Vỏ máy tínhTừ 7 đến 30 ngày\n \nLưu ý: Thời gian hẹn trả chính xác cho mỗi sản phẩm sẽ có sau khi Gearvn tiếp nhận bảo hành và được thể hiện trên phiếu tiếp nhận.\n\nNếu sản phẩm sau khi kiểm tra không có phát sinh lỗi, GearVN xin phép hoàn trả sản phẩm sau 3 ngày."
+        },
+        {
+          "rank": 3,
+          "score": 0.675557,
+          "doc_id": "gearvn-warranty-policy",
+          "chunk_index": 2,
+          "content": "> Chính sách bảo hành GearVN\n> 2. ĐIỀU KIỆN BẢO HÀNH\n\nSản phẩm còn trong thời hạn bảo hành của GearVN; Thời hạn bảo hành được ghi nhận dựa trên thông tin mua hàng, số Serial Number của sản phẩm.\n\nSản phẩm phải còn tem niêm phong bảo hành hoặc tem của nhà phân phối. Với các sản phẩm cần bảo hành theo hộp, khách hàng phải gửi đầy đủ hộp và phụ kiện đi kèm.\n\nSản phẩm còn nguyên trạng, không trầy xước cấn móp, biến dạng ngoài quy định của hãng/ nhà phân phối.\n\nSản phẩm phát sinh lỗi trong quá trình sử dụng do nhà sản xuất như linh kiện, lỗi kỹ thuật.\n\nLưu ý:\n\nCác điều kiện bảo hành cụ thể có thể thay đổi tùy theo từng nhà sản xuất và nhà cung cấp sản phẩm."
+        }
+      ]
+    },
+    {
+      "query": "Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu?",
+      "relevant_doc": "gearvn-return-policy",
+      "relevant_in_top_3": true,
+      "agent_answer": "Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là 14 ngày kể từ khi nhận sản phẩm.",
+      "results": [
+        {
+          "rank": 1,
+          "score": 0.670877,
+          "doc_id": "gearvn-warranty-policy",
+          "chunk_index": 8,
+          "content": "> Chính sách bảo hành GearVN\n> 4. CHÍNH SÁCH BẢO HÀNH CHUNG\n> 4.2 Thời gian xử lý\n\nPK-MAN - Phụ kiện màn hìnhTrong vòng 7 ngày\n\nPK-PC - Phụ kiện PCTừ 14 đến 30 ngày\n\nPKS - Phụ kiện thông minhTrong vòng 30 ngày\n\nPW - Nguồn máy tínhTừ 7 đến 30 ngày\n\nRAMTừ 7 đến 30 ngày\n\nRAM-LAP - RAM LaptopTừ 14 đến 21 ngày\n\nRT - RouterTừ 14 đến 30 ngày\n\nSSD - Ổ cứng SSDTừ 7 đến 30 ngày\n\nTAI - Tai nghe gamingTừ 7 đến 30 ngày\n\nTAI-AUDIO - Tai nghe AudioTừ 7 đến 30 ngày\n\nTBM - Thiết bị mạngTrong vòng 14 ngày\n\nTCG - Tay cầmTừ 7 đến 30 ngày\n\nTN - Tản nhiệtTừ 14 đến 30 ngày\n\nVGA - Card màn hìnhTừ 7 đến 30 ngày\n\nVO - Vỏ máy tínhTừ 7 đến 30 ngày\n \nLưu ý: Thời gian hẹn trả chính xác cho mỗi sản phẩm sẽ có sau khi Gearvn tiếp nhận bảo hành và được thể hiện trên phiếu tiếp nhận.\n\nNếu sản phẩm sau khi kiểm tra không có phát sinh lỗi, GearVN xin phép hoàn trả sản phẩm sau 3 ngày."
+        },
+        {
+          "rank": 2,
+          "score": 0.668453,
+          "doc_id": "gearvn-warranty-policy",
+          "chunk_index": 7,
+          "content": "> Chính sách bảo hành GearVN\n> 4. CHÍNH SÁCH BẢO HÀNH CHUNG\n> 4.2 Thời gian xử lý\n\nGearVN cam kết xử lý trong vòng 30 ngày tính từ ngày tiếp nhận sản phẩm. Thông tin về thời gian xử sẽ được thể hiện trong phiếu bảo hành hoặc thông tin đến khách hàng trong trường hợp khách hàng gửi sản phẩm. Khách hàng có thể tham khảo thời gian dự kiến xử lý theo danh mục sau:\nDanh mục sản phẩmThời gian dự kiến xử lý\n\nCHU - ChuộtTừ 7 đến 30 ngày\n\nCM - Card mạngTừ 21 đến 30 ngày\n\nCPU - Bộ vi xử lýTừ 7 đến 14 ngày\n\nFAN - Quạt máy tínhTrong vòng 21 ngày\n\nGHE - GhếTừ 7 đến 30 ngày\n\nHDD - Ổ cứng HDDTừ 7 đến 21 ngày\n\nKB - Bàn phímTừ 7 đến 30 ngày\n\nLAP - Máy tính xách tay LaptopTừ 7 đến 30 ngày\n\nLOA - LoaTừ 7 đến 30 ngày\n\nMAN - Màn hìnhTừ 7 đến 30 ngày\n\nMB - Bo mạch chủTừ 7 đến 30 ngày\n\nMBH - Máy bộ hãngTừ 21 đến 30 ngày\n\nMCG - Máy chơi game cầm tayTừ 14 đến 30 ngày\n\nLinh kiện khácTừ 7 đến 30 ngày"
+        },
+        {
+          "rank": 3,
+          "score": 0.665851,
+          "doc_id": "gearvn-return-policy",
+          "chunk_index": 2,
+          "content": "> Chính sách đổi trả GearVN\n> 2. Quy định về thời gian thông báo và gửi sản phẩm đổi trả\n\nThời gian thông báo đổi trả: trong vòng 48h kể từ khi nhận sản phẩm đối với trường hợp sản phẩm thiếu phụ kiện, quà tặng hoặc bể vỡ.\n\nThời gian gửi chuyển trả sản phẩm: trong vòng 14 ngày kể từ khi nhận sản phẩm.\n\nĐịa điểm đổi trả sản phẩm: Khách hàng có thể mang hàng trực tiếp đến văn phòng/ cửa hàng của chúng tôi hoặc chuyển qua đường bưu điện.\n\nTrong trường hợp Quý Khách hàng có ý kiến đóng góp/khiếu nại liên quan đến chất lượng sản phẩm, Quý Khách hàng vui lòng liên hệ đường dây chăm sóc khách hàng của chúng tôi."
+        }
+      ]
+    },
+    {
+      "query": "Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này?",
+      "relevant_doc": "gearvn-payment-guide",
+      "relevant_in_top_3": true,
+      "agent_answer": "Bạn cần mở ứng dụng ZaloPay của mình và quét mã QR được cho để hoàn tất việc đặt hàng.",
+      "results": [
+        {
+          "rank": 1,
+          "score": 0.82812,
+          "doc_id": "gearvn-payment-guide",
+          "chunk_index": 2,
+          "content": "> Hướng dẫn thanh toán GearVN\n> Bước 1:\n\nSau khi chọn hình thức thanh toán qua ứng dụng ZaloPay, hệ thống sẽ chuyển sang giao diện thanh toán của ZaloPay."
+        },
+        {
+          "rank": 2,
+          "score": 0.757876,
+          "doc_id": "gearvn-payment-guide",
+          "chunk_index": 3,
+          "content": "> Hướng dẫn thanh toán GearVN\n> Bước 2:\n\nMở ứng dụng ZaloPay của bạn quét mã QR được cho để hoàn tất việc đặt hàng.\n\nVậy là bạn đã hoàn thành việc mua hàng online tại GEARVN thật dễ dàng và tiện lợi."
+        },
+        {
+          "rank": 3,
+          "score": 0.733213,
+          "doc_id": "gearvn-payment-guide",
+          "chunk_index": 4,
+          "content": "> Hướng dẫn thanh toán GearVN\n> Bước 1:\n\nSau khi chọn hình thức thanh toán qua ứng dụng MOMO, hệ thống sẽ chuyển sang giao diện thanh toán của MOMO."
+        }
+      ]
+    },
+    {
+      "query": "Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu?",
+      "relevant_doc": "cellphones-shipping-policy",
+      "metadata_filter": {
+        "customer_role": "buyer"
+      },
+      "relevant_in_top_3": true,
+      "agent_answer": "Phí vận chuyển cho đơn hàng 250.000đ đối với người mua bình thường là 15.000đ.",
+      "results": [
+        {
+          "rank": 1,
+          "score": 0.72455,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 5,
+          "content": "> Chính sách giao hàng CellphoneS\n> 2. THÔNG TIN THANH TOÁN VÀ GIAO HÀNG\n> e. Chí phí vận chuyển:\n\n- Miễn phí vận chuyển mọi đơn hàng đối với thành viên Smem và SVip\n\n\n- Đối với các khách hàng còn lại:\n\n\n+ Đơn hàng dưới 300.000đ: Phí giao hàng 15.000đ\n\n\n+ Đơn hàng từ 300.000đ trở lên: Miễn phí giao hàng\n\n\n- Phụ thu phí cồng kềnh (nếu có), áp dụng đối với các đơn hàng vận chuyển bởi CellphoneS và đối tác giao hàng\n\n\n(***) Đơn hàng được xác định là cồng kềnh nếu rơi vào một trong các trường hợp sau:"
+        },
+        {
+          "rank": 2,
+          "score": 0.632638,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 10,
+          "content": "> Chính sách giao hàng CellphoneS\n> NGOẠI THÀNH\n\n- Với các đơn hàng từ 10 triệu đồng trở lên, CellphoneS xin phép kiểm tra thẻ thanh toán và CCCD của chủ thẻ trước khi giao hàng, nhằm hạn chế rủi ro gian lận.\n\n\n- Quý khách sẽ nhận mã OTP xác nhận qua tin nhắn cho đơn hàng trả trước từ 2 triệu. Vui lòng cấp mã cho nhân viên giao hàng để nhận hàng."
+        },
+        {
+          "rank": 3,
+          "score": 0.614508,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 16,
+          "content": "> Chính sách giao hàng CellphoneS\n> 7. YÊU CẦU THANH TOÁN TRƯỚC VỚI CÁC TRƯỜNG HỢP\n\n* Mua tặng hoặc không thanh toán tiền mặt.\n\n\n\n\nThanh toán trước 100% giá trị đơn hàng\n\n\n\n\n\n\n\n\n* Chuyển khoản 100% hoặc phần số dư của 30 triệu nếu đơn hàng có giá trị trên 30 triệu"
+        }
+      ]
+    },
+    {
+      "query": "Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu?",
+      "relevant_doc": "cellphones-shipping-policy",
+      "relevant_in_top_3": true,
+      "agent_answer": "Nếu bạn hủy đơn hàng và đã thanh toán qua thẻ ATM, bạn sẽ nhận lại tiền trong vòng 7 - 10 ngày làm việc.",
+      "results": [
+        {
+          "rank": 1,
+          "score": 0.57435,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 11,
+          "content": "> Chính sách giao hàng CellphoneS\n> 4. THÔNG TIN VỀ HUỶ ĐƠN HÀNG VÀ THỜI GIAN HOÀN TIỀN:\n\nĐối với các trường hợp huỷ đơn hàng, thời gian hoàn tiền\n\n\n1. Đối với giao dịch tiền mặt: Hoàn ngay tại cửa hàng.\n\n\n2. Đối với giao dịch chuyển khoản: Trong vòng 03 ngày làm việc.\n\n\n3. Đối với giao dịch thẻ ATM: Trong vòng 7 - 10 ngày làm việc.\n\n\n4. Đối với giao dịch thẻ Visa/Master card/JCB: Trong vòng 7 - 15 ngày làm việc.\n\n\n5. Đối với giao dịch thanh toán qua cổng MPOS/ALEPAY/ONEPAY: Trong vòng 7 - 14 ngày làm việc.\n\n\n6. Đối với giao dịch thanh toán qua VNPAY/Kredivo/MoMo/ShopeePay/Zalopay/Fundiin: Trong vòng 3 - 8 ngày làm việc.\n\n\n* Hiệu lực áp dụng: Kể từ ngày 12/12/2022 đến khi có thông báo thay thế mới.\n\n\n* Ngày làm việc được hiểu là các ngày trong tuần từ thứ 2 đến thứ 6, không bao gồm thứ 7, chủ nhật, ngày nghỉ Lễ, Tết theo quy định của pháp luật."
+        },
+        {
+          "rank": 2,
+          "score": 0.573672,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 3,
+          "content": "> Chính sách giao hàng CellphoneS\n> 2. THÔNG TIN THANH TOÁN VÀ GIAO HÀNG\n> c. Mua hàng trả góp:\n\n- Trả góp online hơn 20 loại thẻ tín dụng với lựa chọn mua trả góp thẻ tín dụng qua Alepay (xem thêm thanh toán trả góp trực tuyến Alepay) và hơn 24 thẻ tín dụng qua Onepay (xem thêm thanh toán trả góp trực tuyến Onepay)\n\n\n- Trả góp trực tiếp tại cửa hàng qua các ngân hàng trực tiếp: VP Bank, VIB, VCB, MSB, BIDV, Shinhan Bank, OCB, Home Credit, HSBC, Standard Chartered, ACB, Sacombank, Techcombank, Vietinbank (Miễn phí chuyển đổi lên đến kỳ hạn 12 tháng - Xem thêm ưu đãi chương trình)\n\n\n- Trả góp qua công ty tài chính: xét duyệt hồ sơ online - nhận sản phẩm tại cửa hàng."
+        },
+        {
+          "rank": 3,
+          "score": 0.569862,
+          "doc_id": "cellphones-shipping-policy",
+          "chunk_index": 10,
+          "content": "> Chính sách giao hàng CellphoneS\n> NGOẠI THÀNH\n\n- Với các đơn hàng từ 10 triệu đồng trở lên, CellphoneS xin phép kiểm tra thẻ thanh toán và CCCD của chủ thẻ trước khi giao hàng, nhằm hạn chế rủi ro gian lận.\n\n\n- Quý khách sẽ nhận mã OTP xác nhận qua tin nhắn cho đơn hàng trả trước từ 2 triệu. Vui lòng cấp mã cho nhân viên giao hàng để nhận hàng."
+        }
+      ]
+    }
+  ]
+}

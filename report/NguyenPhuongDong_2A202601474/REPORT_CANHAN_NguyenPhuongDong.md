@@ -117,19 +117,21 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 | - | ----------------- | ------------------------------------------ | ------------ | --------------------------------- | ------------------------------------- |
-| 1 |                   |                                            |              |                                   |                                       |
-| 2 |                   |                                            |              |                                   |                                       |
-| 3 |                   |                                            |              |                                   |                                       |
-| 4 |                   |                                            |              |                                   |                                       |
-| 5 |                   |                                            |              |                                   |                                       |
+| 1 | Sản phẩm gaming gear lỗi do nhà sản xuất được đổi mới trong bao nhiêu ngày? | `gearvn-warranty-policy`, mục `4.1 Chính sách đổi mới`: gaming gear được đổi trong 30 ngày. | 0,770556 | Có (top-1) | Đổi mới trong vòng 30 ngày nếu phát sinh lỗi từ nhà sản xuất. |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN? | Top-1 là `gearvn-warranty-policy`, bảng thời gian xử lý bảo hành 7–30 ngày; chunk chuẩn `gearvn-return-policy` ở top-3. | 0,670877 | Không ở top-1; có ở top-3 | Tối đa 14 ngày kể từ khi nhận sản phẩm. |
+| 3 | Sau khi chọn thanh toán ZaloPay trên GearVN, cần làm gì? | `gearvn-payment-guide`, `Bước 1`: hệ thống chuyển sang giao diện ZaloPay; thao tác quét QR nằm ở top-2. | 0,828120 | Có liên quan; đáp án đủ ở top-2 | Mở ứng dụng ZaloPay và quét mã QR để hoàn tất đặt hàng. |
+| 4 | Phí giao đơn CellphoneS 250.000đ cho người mua thường? (lọc `customer_role="buyer"`) | `cellphones-shipping-policy`, mục `e. Chí phí vận chuyển`: đơn dưới 300.000đ có phí 15.000đ. | 0,724550 | Có (top-1) | Phí vận chuyển là 15.000đ. |
+| 5 | Hủy đơn CellphoneS đã thanh toán qua thẻ ATM thì bao lâu nhận lại tiền? | `cellphones-shipping-policy`, mục `4. THÔNG TIN VỀ HUỶ ĐƠN HÀNG VÀ THỜI GIAN HOÀN TIỀN`: thẻ ATM 7–10 ngày làm việc. | 0,574350 | Có (top-1) | Nhận lại tiền trong vòng 7–10 ngày làm việc. |
 
-> **Trạng thái:** Chưa thể ghi kết quả trung thực vì nhóm chưa cung cấp 5 benchmark queries chung và chưa chạy thử nghiệm Giai đoạn 2. Bảng này sẽ được điền sau khi nhóm thống nhất câu hỏi và dùng embedding thật.
+> **Thiết lập chạy:** `DocumentStructureChunker(max_chunk_size=900)` tạo 56 chunks, chia theo Markdown header và các tiêu đề nhỏ dạng `2.`, `4.1`, `e.`, `Bước 1:`; mỗi chunk được gắn lại chuỗi tiêu đề cha. Embedding dùng OpenAI `text-embedding-3-small`, không dùng model local. Agent dùng top-3 context và trả lời đúng 5/5 câu. Kết quả chi tiết được lưu trong `evaluation_results.json`.
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** __ / 5
+> **Kiểm thử:** 4/4 test riêng cho `DocumentStructureChunker` đều pass; 41 test chức năng cũ pass. Test cấu trúc `test_src_package_exists` không áp dụng cho bố cục nộp bài theo thư mục cá nhân nên được loại khỏi lần chạy này.
+
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 
-> *Viết 2-3 câu:*
+> Khi đối chiếu với các chiến lược chia theo kích thước/câu, tôi nhận thấy giữ lại tiêu đề cha trong chunk giúp các đoạn ngắn không mất chủ đề. Tuy nhiên, câu 2 cho thấy embedding vẫn có thể nhầm giữa “gửi chuyển trả” và “xử lý bảo hành” khi cả hai chunk chứa nhiều mốc thời gian; cần kết hợp metadata/category hoặc reranking nếu muốn đưa chunk chuẩn lên top-1.
 
 ---
 
@@ -141,5 +143,5 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hướng tiếp cận của tôi (My Approach)           | 10 / 10                        |
 | Hoàn thiện code (Core Implementation — tests)     | 30 / 30                        |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5                          |
-| Kết quả truy xuất của tôi (Competition Results) | 0 / 10 (chờ Giai đoạn 2)    |
-| **Tổng phần cá nhân**                      | **50 / 60 (tạm tính)** |
+| Kết quả truy xuất của tôi (Competition Results) | 10 / 10                         |
+| **Tổng phần cá nhân**                      | **60 / 60**                     |

@@ -56,8 +56,15 @@ class OpenAIEmbedder:
         self.client = OpenAI()
 
     def __call__(self, text: str) -> list[float]:
-        response = self.client.embeddings.create(model=self.model_name, input=text)
-        return [float(value) for value in response.data[0].embedding]
+        return self.embed_many([text])[0]
+
+    def embed_many(self, texts: list[str]) -> list[list[float]]:
+        """Embed a batch in one API request, preserving input order."""
+        if not texts:
+            return []
+        response = self.client.embeddings.create(model=self.model_name, input=texts)
+        ordered = sorted(response.data, key=lambda item: item.index)
+        return [[float(value) for value in item.embedding] for item in ordered]
 
 
 _mock_embed = MockEmbedder()

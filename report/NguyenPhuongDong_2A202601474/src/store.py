@@ -41,7 +41,9 @@ class EmbeddingStore:
             self._use_chroma = False
             self._collection = None
 
-    def _make_record(self, doc: Document) -> dict[str, Any]:
+    def _make_record(
+        self, doc: Document, embedding: list[float] | None = None
+    ) -> dict[str, Any]:
         metadata = {
             str(key): (
                 value
@@ -55,7 +57,7 @@ class EmbeddingStore:
             "id": f"{doc.id}::{self._next_index}",
             "content": doc.content,
             "metadata": metadata,
-            "embedding": self._embedding_fn(doc.content),
+            "embedding": embedding if embedding is not None else self._embedding_fn(doc.content),
         }
         self._next_index += 1
         return record
@@ -83,7 +85,12 @@ class EmbeddingStore:
         For ChromaDB: use collection.add(ids=[...], documents=[...], embeddings=[...])
         For in-memory: append dicts to self._store
         """
-        records = [self._make_record(doc) for doc in docs]
+        embed_many = getattr(self._embedding_fn, "embed_many", None)
+        embeddings = embed_many([doc.content for doc in docs]) if embed_many and docs else None
+        records = [
+            self._make_record(doc, embeddings[index] if embeddings is not None else None)
+            for index, doc in enumerate(docs)
+        ]
         if not records:
             return
 
