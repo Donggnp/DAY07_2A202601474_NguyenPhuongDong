@@ -16,7 +16,7 @@
 
 **Độ tương tự cosine cao (High cosine similarity) nghĩa là gì?**
 
-> Hai văn bản có độ tương tự cosine cao khi vector biểu diễn của chúng hướng gần giống nhau, hai văn bản có nội dung hoặc ý nghĩa gần nhau, dù có thể dùng từ khác nhau.
+> Hai văn bản có độ tương tự cosine cao khi vector biểu diễn của chúng hướng gần giống nhau,  hai văn bản có nội dung hoặc ý nghĩa gần nhau, dù có thể dùng từ khác nhau.
 
 **Ví dụ có độ tương tự CAO:**
 
@@ -86,14 +86,12 @@ Vượt qua bộ kiểm thử là điều kiện tính điểm phần này.
 ### Kết Quả Kiểm Thử (Test Results)
 
 ```
-Ran 42 tests in 0.725s
-
-OK
+collected 42 items
+tests/test_solution.py ..........................................       [100%]
+42 passed, 1 warning in 0.66s
 ```
 
 **Số lượng bài test vượt qua (pass):** 42 / 42
-
-> Môi trường kiểm tra không có module `pytest`, vì vậy cùng test suite được chạy bằng `python3 -m unittest tests.test_solution -v`.
 
 ---
 
