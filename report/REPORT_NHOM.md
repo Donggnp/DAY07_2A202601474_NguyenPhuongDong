@@ -99,11 +99,11 @@ Chạy `ChunkingStrategyComparator().compare()` trên 2-3 tài liệu:
 
 | # | Câu hỏi (Query) | Câu trả lời chuẩn (Gold Answer) | Chunk nào chứa thông tin? |
 |---|-------|-------------------------------|--------------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | Khách hàng sẽ được đổi mới trong vòng 30 ngày tính từ ngày mua hàng. | `gearvn-warranty-policy` (phần 4.1 Chính sách đổi mới) |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu? | Trong vòng 14 ngày kể từ khi nhận sản phẩm. | `gearvn-return-policy` (phần 2. Quy định về thời gian thông báo và gửi sản phẩm đổi trả) |
+| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này? | Mở ứng dụng ZaloPay của bạn và quét mã QR được cung cấp để hoàn tất việc đặt hàng. | `gearvn-payment-guide` (phần Thanh toán qua Ứng dụng ZaloPay / Bước 1 & Bước 2) |
+| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu? (Lọc metadata: `customer_role="buyer"`) | Đơn hàng dưới 300.000đ sẽ có phí giao hàng là 15.000đ. | `cellphones-shipping-policy` (phần 2. THÔNG TIN THANH TOÁN VÀ GIAO HÀNG / mục e. Chí phí vận chuyển) |
+| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu? | Trong vòng 7 - 10 ngày làm việc. | `cellphones-shipping-policy` (phần 4. THÔNG TIN VỀ HUỶ ĐƠN HÀNG VÀ THỜI GIAN HOÀN TIỀN) |
 
 ### Tổng hợp chất lượng truy xuất của nhóm
 
