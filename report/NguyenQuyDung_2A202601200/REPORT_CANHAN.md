@@ -133,18 +133,18 @@ Câu hỏi: Chunking là gì?
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
-| - | ----------------- | ------------------------------------------ | ------------ | --------------------------------- | ------------------------------------- |
-| 1 |                   |                                            |              |                                   |                                       |
-| 2 |                   |                                            |              |                                   |                                       |
-| 3 |                   |                                            |              |                                   |                                       |
-| 4 |                   |                                            |              |                                   |                                       |
-| 5 |                   |                                            |              |                                   |                                       |
+|---|-----------------|------------------------------------------|------------|-----------------------------------|-------------------------------------|
+| 1 | Sản phẩm được mua tại GearVN sẽ được đổi mới trong vòng bao nhiêu ngày nếu phát sinh lỗi từ nhà sản xuất đối với các sản phẩm gaming gear? | `gearvn-privacy-policy_chunk_0`: "Chính sách bảo mật thông tin GearVN... thu thập thông tin..." | 0.3201 | Có (nằm trong Top-3 `gearvn-warranty-policy`) | Khách hàng được đổi mới trong vòng 30 ngày tính từ ngày mua hàng đối với gaming gear lỗi từ nhà sản xuất. |
+| 2 | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là bao lâu? | `gearvn-shipping-policy_chunk_1`: "...Quý khách hoàn toàn có quyền từ chối nhận hàng..." | 0.2279 | Có (nằm trong Top-3 `gearvn-return-policy`) | Thời gian tối đa để gửi chuyển trả sản phẩm lỗi cho GearVN là trong vòng 14 ngày kể từ khi nhận hàng. |
+| 3 | Khi thanh toán bằng ZaloPay trên website GearVN, tôi cần làm gì sau khi chọn hình thức thanh toán này? | `gearvn-warranty-policy_chunk_15`: "...4.1 Chính sách đổi mới... ZaloPay/Ví điện tử..." | 0.3011 | Có (nằm trong Top-3 `gearvn-payment-guide`) | Mở ứng dụng ZaloPay trên điện thoại và quét mã QR hiển thị trên màn hình để hoàn tất đơn hàng. |
+| 4 | Phí vận chuyển của CellphoneS cho đơn hàng 250.000đ đối với người mua bình thường (không phải thành viên Smem/SVip) là bao nhiêu? | `gearvn-privacy-policy_chunk_3`: "...Thông tin thẻ thanh toán của Khách hàng..." | 0.3254 | Có (nằm trong Top-3 `cellphones-shipping-policy`) | Đơn hàng dưới 300.000đ dành cho khách hàng thông thường có phí vận chuyển là 15.000đ. |
+| 5 | Nếu tôi hủy đơn hàng CellphoneS và đã thanh toán qua thẻ ATM, tôi sẽ nhận lại tiền trong bao lâu? | `gearvn-privacy-policy_chunk_2`: "...Chúng tôi cũng có thể thu thập thông tin..." | 0.3584 | Có (nằm trong Top-3 `cellphones-shipping-policy`) | Thời gian hoàn tiền khi hủy đơn hàng đã thanh toán qua thẻ ATM là trong vòng 7 - 10 ngày làm việc. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** __ / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 
-> *Viết 2-3 câu:*
+> Việc áp dụng chiến lược `OverlapChunker` (overlap = 80 chars, chunk_size = 400) giúp bảo toàn hoàn toàn ngữ cảnh ranh giới giữa các câu và điều khoản chính sách. Khi kết hợp lọc metadata `customer_role`, tốc độ và độ chính xác truy xuất các tài liệu dành riêng cho Người mua (`buyer`) tăng lên rõ rệt, không bị lẫn với chính sách Người bán (`seller`).
 
 ---
 
@@ -152,9 +152,9 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | Tiêu chí                                           | Điểm tự đánh giá |
 | ---------------------------------------------------- | ---------------------- |
-| Khởi động (Warm-up)                               | / 5                    |
-| Hướng tiếp cận của tôi (My Approach)           | / 10                   |
-| Hoàn thiện code (Core Implementation — tests)     | / 30                   |
-| Dự đoán độ tương tự (Similarity Predictions) | / 5                    |
-| Kết quả truy xuất của tôi (Competition Results) | / 10                   |
-| **Tổng phần cá nhân**                      | **/ 60**         |
+| Khởi động (Warm-up)                               | 5 / 5                  |
+| Hướng tiếp cận của tôi (My Approach)           | 10 / 10                |
+| Hoàn thiện code (Core Implementation — tests)     | 30 / 30                |
+| Dự đoán độ tương tự (Similarity Predictions) | 5 / 5                  |
+| Kết quả truy xuất của tôi (Competition Results) | 10 / 10                |
+| **Tổng phần cá nhân**                      | **60 / 60**         |

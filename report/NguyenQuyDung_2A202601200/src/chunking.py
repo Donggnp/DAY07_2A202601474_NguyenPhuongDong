@@ -25,11 +25,41 @@ class FixedSizeChunker:
         if len(text) <= self.chunk_size:
             return [text]
 
-        step = self.chunk_size - self.overlap
+        step = max(1, self.chunk_size - self.overlap)
         chunks: list[str] = []
         for start in range(0, len(text), step):
             chunk = text[start : start + self.chunk_size]
             chunks.append(chunk)
+            if start + self.chunk_size >= len(text):
+                break
+        return chunks
+
+
+class OverlapChunker:
+    """
+    Explicit Overlap Chunker strategy for sliding window text splitting.
+    
+    Splits text into fixed-size segments (chunk_size) with a sliding window
+    defined by overlap_size characters between adjacent chunks.
+    """
+
+    def __init__(self, chunk_size: int = 500, overlap_size: int = 100) -> None:
+        if overlap_size >= chunk_size:
+            raise ValueError("overlap_size must be strictly less than chunk_size")
+        self.chunk_size = chunk_size
+        self.overlap_size = overlap_size
+
+    def chunk(self, text: str) -> list[str]:
+        if not text:
+            return []
+        if len(text) <= self.chunk_size:
+            return [text]
+
+        step = self.chunk_size - self.overlap_size
+        chunks: list[str] = []
+        for start in range(0, len(text), step):
+            chunk_content = text[start : start + self.chunk_size]
+            chunks.append(chunk_content)
             if start + self.chunk_size >= len(text):
                 break
         return chunks
@@ -164,12 +194,14 @@ def compute_similarity(vec_a: list[float], vec_b: list[float]) -> float:
 class ChunkingStrategyComparator:
     """Run all built-in chunking strategies and compare their results."""
 
-    def compare(self, text: str, chunk_size: int = 200) -> dict:
-        fixed_chunker = FixedSizeChunker(chunk_size=chunk_size)
+    def compare(self, text: str, chunk_size: int = 200, overlap_size: int = 50) -> dict:
+        fixed_chunker = FixedSizeChunker(chunk_size=chunk_size, overlap=overlap_size)
+        overlap_chunker = OverlapChunker(chunk_size=chunk_size, overlap_size=overlap_size)
         sentence_chunker = SentenceChunker()
         recursive_chunker = RecursiveChunker(chunk_size=chunk_size)
 
         fixed_chunks = fixed_chunker.chunk(text)
+        overlap_chunks = overlap_chunker.chunk(text)
         sentence_chunks = sentence_chunker.chunk(text)
         recursive_chunks = recursive_chunker.chunk(text)
 
@@ -184,6 +216,7 @@ class ChunkingStrategyComparator:
 
         return {
             "fixed_size": _get_stats(fixed_chunks),
+            "overlap": _get_stats(overlap_chunks),
             "by_sentences": _get_stats(sentence_chunks),
             "recursive": _get_stats(recursive_chunks),
         }
